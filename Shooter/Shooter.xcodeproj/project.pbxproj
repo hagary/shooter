@@ -89,6 +89,7 @@
 		0E92B0041DE0E28100C4E529 /* Shooter */ = {
 			isa = PBXGroup;
 			children = (
+				0E92B0051DE0E28100C4E529 /* main.cpp */,
 				0E92B00C1DE0E2D000C4E529 /* Bullet.cpp */,
 				0E92B00D1DE0E2D000C4E529 /* Bullet.hpp */,
 				0E92B00E1DE0E2D000C4E529 /* constants.h */,
@@ -100,7 +101,6 @@
 				0E92B0141DE0E2D000C4E529 /* Target.hpp */,
 				0E92B0151DE0E2D000C4E529 /* Trajectory.cpp */,
 				0E92B0161DE0E2D000C4E529 /* Trajectory.hpp */,
-				0E92B0051DE0E28100C4E529 /* main.cpp */,
 			);
 			path = Shooter;
 			sourceTree = "<group>";
@@ -283,6 +283,7 @@
 				0E92B00B1DE0E28100C4E529 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
