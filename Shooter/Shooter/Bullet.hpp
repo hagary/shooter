@@ -10,12 +10,32 @@
 #define Bullet_hpp
 
 #include <stdio.h>
+#include <GLUT/glut.h>
 #include "Trajectory.hpp"
 
 class Bullet : public Trajectory{
 public:
-    Bullet();
     void draw();
+    Bullet(GLdouble,GLdouble,GLfloat[3],GLint,GLint);
+private:
+    GLdouble radius;
+    GLdouble height;
+    GLdouble smallH;
+    GLdouble coneH;
+    GLdouble smallR;
+    GLdouble sphereR;
+    GLdouble smallConeH;
+    GLfloat color [3];
+    GLint slices;
+    GLint stacks;
+    void drawBigCylinder();
+    void drawSmallCylinder();
+    void drawIntermediateCone();
+    void drawUpperCone();
+    void drawEnclosingDisk();
+    void drawEnclosingSphere();
+    void drawBigTorus();
+    void drawSmallTorus();
 };
 
 #endif /* Bullet_hpp */

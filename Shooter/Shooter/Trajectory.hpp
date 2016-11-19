@@ -10,9 +10,8 @@
 #define Trajectory_hpp
 
 #include <stdio.h>
-
-#endif /* Trajectory_hpp */
-
 class Trajectory{
     virtual void draw() = 0;
 };
+#endif /* Trajectory_hpp */
+

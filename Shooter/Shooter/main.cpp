@@ -8,6 +8,7 @@
 
 #include <GLUT/glut.h>
 #include "Grenade.hpp"
+#include "Bullet.hpp"
 #include "constants.h"
 
 
@@ -56,15 +57,21 @@ int angle = 0;
 void Display() {
     setupLights();
     setupCamera();
-    
-    //grenade
-    Grenade *g = new Grenade(gRadius, gSphereColor,gTorusColor,gCylinderColor, grenadeSlices,grenadeStacks);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glPushMatrix();
-    glRotated(angle, 1, 1, 1);
-    g->draw();
-    glPopMatrix();
+
+    //grenade
+//    Grenade *g = new Grenade(gRadius, gSphereColor,gTorusColor,gCylinderColor, grenadeSlices,grenadeStacks);
+//    glPushMatrix();
+//    glRotated(angle, 1, 1, 1);
+//    g->draw();
+//    glPopMatrix();
     
+    //bullet
+    Bullet *b = new Bullet(bRadius, bHeight, bColor, bSlices, bStacks);
+        glPushMatrix();
+        glRotated(angle, 1, 1, 1);
+        b->draw();
+        glPopMatrix();
     
     glFlush();
 }
