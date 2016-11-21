@@ -9,6 +9,7 @@
 #include <GLUT/glut.h>
 #include "Grenade.hpp"
 #include "Bullet.hpp"
+#include "Shuriken.hpp"
 #include "constants.h"
 
 
@@ -67,13 +68,21 @@ void Display() {
 //    glPopMatrix();
     
     //bullet
-    Bullet *b = new Bullet(bRadius, bHeight, bColor, bSlices, bStacks);
-        glPushMatrix();
-        glRotated(angle, 1, 1, 1);
-        b->draw();
-        glPopMatrix();
+//    Bullet *b = new Bullet(bRadius, bHeight, bColor, bSlices, bStacks);
+//        glPushMatrix();
+//        glRotated(angle, 1, 1, 1);
+//        b->draw();
+//        glPopMatrix();
+//    
     
+    //shuriken
+    Shuriken *s = new Shuriken(sRadius, sHeight, sColor, sSlices, sStacks);
+            glPushMatrix();
+            glRotated(angle, 1, 1, 1);
+            s->draw();
+            glPopMatrix();
     glFlush();
+
 }
 void anim(){
     angle++;
