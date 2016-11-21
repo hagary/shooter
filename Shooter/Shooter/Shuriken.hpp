@@ -11,8 +11,20 @@
 
 #include <stdio.h>
 #include "Trajectory.hpp"
+#include <GLUT/glut.h>
 
 class Shuriken : public Trajectory{
-    
+public:
+    void draw();
+    Shuriken(GLdouble,GLdouble, GLfloat [3], GLint, GLint);
+private:
+    GLfloat color[3];
+    GLdouble coneRadius;
+    GLdouble coneHeight;
+    GLint slices;
+    GLint stacks;
+    void drawDiamond();
+    void drawTorus();
+    void drawFan();
 };
 #endif /* Shuriken_hpp */

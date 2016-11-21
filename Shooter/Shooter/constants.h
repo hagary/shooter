@@ -25,4 +25,11 @@ const GLdouble bHeight = 0.6;
 GLfloat bColor[3]={0,0,1.0};
 
 
+//SHURIKEN VALUES
+const GLint sSlices = 50;
+const GLint sStacks = 50;
+const GLdouble sRadius = 0.08;
+const GLdouble sHeight = 0.08;
+GLfloat sColor[3]={0,0,1.0};
+
 #endif /* constants_h */
