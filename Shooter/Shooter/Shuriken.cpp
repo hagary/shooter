@@ -16,7 +16,6 @@ Shuriken::Shuriken(GLdouble cR, GLdouble cH, GLfloat c [3], GLint sl, GLint st){
     stacks = st;
 }
 void Shuriken::draw(){
-    glColor3fv(color);
     drawDiamond();
     drawTorus();
     drawFan();
@@ -35,6 +34,7 @@ void Shuriken::draw(){
     glPopMatrix();
 }
 void Shuriken::drawDiamond(){
+    glColor3fv(color);
     glPushMatrix();
     glScaled(1/10.0, 1/10.0, 1/10.0);
     glutSolidOctahedron();
@@ -42,6 +42,7 @@ void Shuriken::drawDiamond(){
     
 }
 void Shuriken::drawTorus(){
+    glColor3fv(color);
     GLdouble inner = coneRadius/5;
     glPushMatrix();
     glutSolidTorus(inner, coneRadius+0.005, slices, stacks);
