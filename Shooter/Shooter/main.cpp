@@ -41,7 +41,6 @@ void setupLights() {
 }
 
 void setupCamera() {
-    glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     float aspect = (float)width / (float)height;
@@ -56,7 +55,7 @@ void setupCamera() {
 int angle = 0;
 
 void Display() {
-    setupLights();
+//    setupLights();
     setupCamera();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -104,8 +103,8 @@ int main(int argc, char** argv) {
     glutIdleFunc(anim);
 
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+//    glEnable(GL_LIGHTING);
+//    glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
     glEnable(GL_COLOR_MATERIAL);
     
