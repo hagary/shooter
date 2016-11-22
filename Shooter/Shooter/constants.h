@@ -22,7 +22,7 @@ const GLint bSlices = 50;
 const GLint bStacks = 50;
 const GLdouble bRadius = 0.08;
 const GLdouble bHeight = 0.6;
-GLfloat bColor[3]={0,0,1.0};
+GLfloat bColor[3]={0.6,0.6,0.6};
 
 
 //SHURIKEN VALUES
@@ -38,6 +38,8 @@ const GLint tStacks = 50;
 GLfloat tColor1[3]={1.0,1.0,0.0}; //yellow
 GLfloat tColor2[3]={1.0,0,0.0}; //red
 GLfloat tColor3[3]={0,0,1.0}; //blue
+GLdouble tPos[3]={0.0,0.0,-0.8};
+GLdouble tScale = 0.2;
 
 
 //WALL VALUES
