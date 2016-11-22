@@ -7,3 +7,50 @@
 //
 
 #include "Walls.hpp"
+Walls::Walls(){
+    
+}
+void Walls::draw(){
+    glBegin(GL_QUADS);
+    /* Floor */
+    glColor3f(0.7,0.7,0.7);
+    glVertex3f(-1,-1,-1);
+    glVertex3f(1,-1,-1);
+    glVertex3f(1,-1,1);
+    glVertex3f(-1,-1,1);
+    
+    /* Ceiling */
+    glColor3f(0.7,0.7,0.7);
+    glVertex3f(-1,1,-1);
+    glVertex3f(1,1,-1);
+    glVertex3f(1,1,1);
+    glVertex3f(-1,1,1);
+    
+    /* Walls */
+    
+    //FRONT WALL
+    glColor3f(0,0,0.2);
+    glVertex3f(-1,-1,-1);
+    glVertex3f(1,-1,-1);
+    glVertex3f(1,1,-1);
+    glVertex3f(-1,1,-1);
+    
+    //SIDE WALLS
+    glColor3f(0.5,0.5,0.5);
+    glVertex3f(1,1,1);
+    glVertex3f(1,-1,1);
+    glVertex3f(1,-1,-1);
+    glVertex3f(1,1,-1);
+    
+    glVertex3f(-1,1,1);
+    glVertex3f(-1,-1,1);
+    glVertex3f(-1,-1,-1);
+    glVertex3f(-1,1,-1);
+    glEnd();
+}
+//void Walls::drawWall() {
+//    glPushMatrix();
+//    glScaled(1.0, thickness, 1.0);
+//    glutSolidCube(1);
+//    glPopMatrix();
+//}

@@ -11,19 +11,14 @@
 #include "Bullet.hpp"
 #include "Shuriken.hpp"
 #include "Target.hpp"
+#include "Walls.hpp"
 #include "constants.h"
 
 
 int width = 1024;
 int height = 720;
 
-void drawWall(double thickness) {
-    glPushMatrix();
-    glTranslated(0.5, 0.5 * thickness, 0.5);
-    glScaled(1.0, thickness, 1.0);
-    glutSolidCube(1);
-    glPopMatrix();
-}
+
 
 void setupLights() {
     GLfloat ambient[] = { 0.7f, 0.7f, 0.7, 1.0f };
@@ -44,13 +39,16 @@ void setupLights() {
 void setupCamera() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    float aspect = (float)width / (float)height;
-    glOrtho(-aspect, aspect, -1, 1, -1, 1);
-    //gluPerspective(60, 640 / 480, 0.001, 100);
+//    float aspect = (float)width / (float)height;
+//    glOrtho(-aspect, aspect, -1, 1, -1, 1);
+//    glOrtho(-0.5, 0.5, -0.5, 0.5, -1, 1);
+//    glFrustum(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far);
+    gluPerspective(120, width / height, 0.001, 100);
+    
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0 , 0, 0.5,0.0, 0.0, 0.0, 0.0, 1, 0);
+    gluLookAt(0 , 0, 0.2,0.0, 0.0, -0.5, 0.0, 1, 0);
 }
 
 int angle = 0;
@@ -83,11 +81,15 @@ void Display() {
 //            glPopMatrix();
     
     //Target
-    Target *t = new Target(tColor1,tColor2,tColor3,tSlices,tStacks);
-                glPushMatrix();
-                glRotated(angle, 1, 1, 1);
-                t->draw();
-                glPopMatrix();
+//    Target *t = new Target(tColor1,tColor2,tColor3,tSlices,tStacks);
+//                glPushMatrix();
+//                glRotated(angle, 1, 1, 1);
+//                t->draw();
+//                glPopMatrix();
+    
+    //Wall
+    Walls *w = new Walls();
+        w->draw();
     glFlush();
 
 }

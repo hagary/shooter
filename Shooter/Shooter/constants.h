@@ -39,4 +39,8 @@ GLfloat tColor1[3]={1.0,1.0,0.0}; //yellow
 GLfloat tColor2[3]={1.0,0,0.0}; //red
 GLfloat tColor3[3]={0,0,1.0}; //blue
 
+
+//WALL VALUES
+GLdouble wThickness = 0.01;
+
 #endif /* constants_h */
