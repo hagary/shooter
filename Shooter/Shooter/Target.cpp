@@ -16,10 +16,23 @@ Target::Target(GLfloat c1 [3], GLfloat c2 [3], GLfloat c3 [3], GLint sl, GLint s
 
 }
 void Target::draw(){
-    glColor3fv(color1);
     glPushMatrix();
-    GLUquadricObj * qobj;
-    qobj = gluNewQuadric();
-    gluDisk(qobj, 0, 0.2, slices, stacks);
+    //1. Inner Yellow Disk
+    glColor3fv(color1);
+    GLUquadricObj * qobjY;
+    qobjY = gluNewQuadric();
+    gluDisk(qobjY, 0, 0.1, slices, stacks);
+    //2. Middle Red Disk
+    glColor3fv(color2);
+    GLUquadricObj * qobjR;
+    qobjR = gluNewQuadric();
+    gluDisk(qobjR, 0.1, 0.2, slices, stacks);
+    //3. Outer Blue Disk
+    glColor3fv(color3);
+    GLUquadricObj * qobjB;
+    qobjB = gluNewQuadric();
+    gluDisk(qobjB, 0.2, 0.3, slices, stacks);
     glPopMatrix();
+
+
 }
