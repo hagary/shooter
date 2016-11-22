@@ -10,5 +10,11 @@
 #define Walls_hpp
 
 #include <stdio.h>
+#include <GLUT/glut.h>
+class Walls {
+public:
+    Walls();
+    void draw();
 
+};
 #endif /* Walls_hpp */
