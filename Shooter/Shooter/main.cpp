@@ -43,7 +43,7 @@ void setupCamera() {
 //    glOrtho(-aspect, aspect, -1, 1, -1, 1);
 //    glOrtho(-0.5, 0.5, -0.5, 0.5, -1, 1);
 //    glFrustum(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far);
-    gluPerspective(120, width / height, 0.001, 100);
+    gluPerspective(120, width / height, 0.001, 10);
     
     
     glMatrixMode(GL_MODELVIEW);
@@ -51,7 +51,6 @@ void setupCamera() {
     gluLookAt(0 , 0, 0.2,0.0, 0.0, -0.5, 0.0, 1, 0);
 }
 
-int angle = 0;
 
 void Display() {
 //    setupLights();
@@ -68,10 +67,11 @@ void Display() {
     //bullet
 //    Bullet *b = new Bullet(bRadius, bHeight, bColor, bSlices, bStacks);
 //        glPushMatrix();
-//        glRotated(angle, 1, 1, 1);
+//        glTranslated(0, -0.05, 0.16);
+//        glScaled(0.03, 0.03, 0.03);
 //        b->draw();
 //        glPopMatrix();
-//    
+    
     
     //shuriken
 //    Shuriken *s = new Shuriken(sRadius, sHeight, sColor, sSlices, sStacks);
@@ -81,21 +81,19 @@ void Display() {
 //            glPopMatrix();
     
     //Target
-//    Target *t = new Target(tColor1,tColor2,tColor3,tSlices,tStacks);
-//                glPushMatrix();
-//                glRotated(angle, 1, 1, 1);
-//                t->draw();
-//                glPopMatrix();
+    Target *t = new Target(tPos,tScale,tColor1,tColor2,tColor3,tSlices,tStacks);
+                glPushMatrix();
+                t->draw();
+                glPopMatrix();
     
-    //Wall
+    //Walls
     Walls *w = new Walls();
         w->draw();
     glFlush();
 
 }
 void anim(){
-    angle++;
-    glutPostRedisplay();
+
 
 }
 
@@ -110,7 +108,7 @@ int main(int argc, char** argv) {
     glutDisplayFunc(Display);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-    glutIdleFunc(anim);
+//    glutIdleFunc(anim);
 
     glEnable(GL_DEPTH_TEST);
 //    glEnable(GL_LIGHTING);
