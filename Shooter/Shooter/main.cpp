@@ -10,6 +10,7 @@
 #include "Grenade.hpp"
 #include "Bullet.hpp"
 #include "Shuriken.hpp"
+#include "Target.hpp"
 #include "constants.h"
 
 
@@ -75,11 +76,18 @@ void Display() {
 //    
     
     //shuriken
-    Shuriken *s = new Shuriken(sRadius, sHeight, sColor, sSlices, sStacks);
-            glPushMatrix();
-            glRotated(angle, 1, 1, 1);
-            s->draw();
-            glPopMatrix();
+//    Shuriken *s = new Shuriken(sRadius, sHeight, sColor, sSlices, sStacks);
+//            glPushMatrix();
+//            glRotated(angle, 1, 1, 1);
+//            s->draw();
+//            glPopMatrix();
+    
+    //Target
+    Target *t = new Target(tColor1,tColor2,tColor3,tSlices,tStacks);
+                glPushMatrix();
+                glRotated(angle, 1, 1, 1);
+                t->draw();
+                glPopMatrix();
     glFlush();
 
 }

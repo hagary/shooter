@@ -28,4 +28,5 @@
 *.out
 *.app
 
-Shooter/Shooter.xcodeproj/project.xcworkspace/xcuserdata/hagar.xcuserdatad/UserInterfaceState.xcuserstate
+*.pbxproj
+*.xcuserstate
