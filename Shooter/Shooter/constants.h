@@ -32,4 +32,11 @@ const GLdouble sRadius = 0.08;
 const GLdouble sHeight = 0.08;
 GLfloat sColor[3]={0,0,1.0};
 
+//TARGET VALUES
+const GLint tSlices = 50;
+const GLint tStacks = 50;
+GLfloat tColor1[3]={1.0,1.0,0.0}; //yellow
+GLfloat tColor2[3]={1.0,0,0.0}; //red
+GLfloat tColor3[3]={0,0,1.0}; //blue
+
 #endif /* constants_h */
