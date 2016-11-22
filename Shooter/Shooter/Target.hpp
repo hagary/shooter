@@ -16,7 +16,9 @@ class Target{
 public:
     void draw();
     Target(GLdouble[3], GLdouble,GLfloat [3], GLfloat[3], GLfloat[3], GLint, GLint);
-    GLdouble positon [3];
+    GLdouble posX;
+    GLdouble posY;
+    GLdouble posZ;
 private:
     GLint slices;
     GLint stacks;

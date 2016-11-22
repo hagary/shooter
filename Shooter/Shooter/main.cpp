@@ -7,6 +7,8 @@
 //
 
 #include <GLUT/glut.h>
+#include <stdio.h>
+
 #include "Grenade.hpp"
 #include "Bullet.hpp"
 #include "Shuriken.hpp"
@@ -18,6 +20,7 @@
 int width = 1024;
 int height = 720;
 
+Target *t;
 
 
 void setupLights() {
@@ -51,7 +54,9 @@ void setupCamera() {
     gluLookAt(0 , 0, 0.2,0.0, 0.0, -0.5, 0.0, 1, 0);
 }
 
-
+void initGame(){
+    t = new Target(tPos,tScale,tColor1,tColor2,tColor3,tSlices,tStacks);
+}
 void Display() {
 //    setupLights();
     setupCamera();
@@ -81,10 +86,9 @@ void Display() {
 //            glPopMatrix();
     
     //Target
-    Target *t = new Target(tPos,tScale,tColor1,tColor2,tColor3,tSlices,tStacks);
-                glPushMatrix();
-                t->draw();
-                glPopMatrix();
+        glPushMatrix();
+        t->draw();
+        glPopMatrix();
     
     //Walls
     Walls *w = new Walls();
@@ -96,16 +100,48 @@ void anim(){
 
 
 }
+void spe(int k, int x,int y){
+    /* TARGET CONTROL */
+    
+    /* X-AXIS */
+    if(k==GLUT_KEY_RIGHT){
+        t->posX += 0.01;
+    }
+    if(k==GLUT_KEY_LEFT)
+        t->posX -= 0.01;
+    /* Y-AXIS */
+    if(k==GLUT_KEY_UP)
+        t->posY += 0.01;
+    if(k==GLUT_KEY_DOWN)
+        t->posY -= 0.01;
+
+    glutPostRedisplay();
+}
+void key(unsigned char k, int x,int y)
+{
+    /* TARGET CONTROL */
+    /* Z-AXIS */
+    if(k=='k')
+        t->posZ-=0.01;
+    if(k=='l')
+        t->posZ+=0.01;
+        
+    glutPostRedisplay();//redisplay to update the screen with the changes
+}
 
 int main(int argc, char** argv) {
+    //Initialize needed objects
+    initGame();
+    
     glutInit(&argc, argv);
     glutInitWindowSize(width, height);
     glutInitWindowPosition(50, 50);
 
     glutCreateWindow("Shooter");
 //    glutFullScreen();
-
     glutDisplayFunc(Display);
+    glutKeyboardFunc(key);
+    glutSpecialFunc(spe);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 //    glutIdleFunc(anim);

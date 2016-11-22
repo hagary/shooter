@@ -13,7 +13,7 @@ Target::Target(GLdouble pos [3], GLdouble s,GLfloat c1 [3], GLfloat c2 [3], GLfl
     color3[0]=c3[0]; color3[1]=c3[1]; color3[2]=c3[2];
     slices = sl;
     stacks = st;
-    positon[0] = pos[0]; positon[1]=pos[1]; positon[2]=pos[2];
+    posX = pos[0]; posY=pos[1]; posZ=pos[2];
     scale = s;
     
 
@@ -21,7 +21,7 @@ Target::Target(GLdouble pos [3], GLdouble s,GLfloat c1 [3], GLfloat c2 [3], GLfl
 void Target::draw(){
     glPushMatrix();
     glScaled(scale, scale, scale);
-    glTranslated(positon[0], positon[1], positon[2]);
+    glTranslated(posX, posY, posZ);
     
     //1. Inner Yellow Disk
     glColor3fv(color1);
