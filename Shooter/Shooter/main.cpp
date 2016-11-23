@@ -44,6 +44,7 @@ double grenadeX = 0;
 double grenadeY = -0.05;
 double grenadeZ = 0.16;
 double grenadeRotAngle = 0;
+double gBezier = 0.0;
 Shuriken *s;
 
 int width = 1024;
@@ -114,12 +115,23 @@ void rotateBullet(){
 void rotateGrenade(){
     
 }
-int* bezier(float t, int* p0,int* p1,int* p2,int* p3){
-    int res[2];
+double* bezier(double t, float* p0,float* p1,float* p2,float* p3){
+    double res[2];
     res[0]=pow((1-t),3)*p0[0]+3*t*pow((1-t),2)*p1[0]+3*pow(t,2)*(1-t)*p2[0]+pow(t,3)*p3[0];
     res[1]=pow((1-t),3)*p0[1]+3*t*pow((1-t),2)*p1[1]+3*pow(t,2)*(1-t)*p2[1]+pow(t,3)*p3[1];
     return res;
 }
+void translateGrenade(){
+    float p0 [2] = {0.16,-0.05};
+    float p1 [2] = {0,0.2};
+    float p2 [2] = {-0.4,0.2};
+    float p3 [2] = {-0.6, -0.9};
+    double* p =bezier(gBezier,p0,p1,p2,p3);
+    gBezier+=0.001;
+    grenadeY = p[1];
+    grenadeZ = p[0];
+}
+
 void anim(){
     if(game_mode == SHOOT){
         switch(trajectory){
@@ -131,6 +143,7 @@ void anim(){
             }
             case GRENADE:
             {
+                translateGrenade();
                 grenadeRotAngle++;
                 break;
             }
@@ -188,7 +201,7 @@ void passM(int mouseX,int mouseY){
         mouseX = mouseX - winW/2;
         
         //Change x-comp of center of gluLookAT
-        xCamDir += 0.001*(mouseX - prevMouseX);
+        xCamDir += 0.01*(mouseX - prevMouseX);
         if(xCamDir<-0.3)
             xCamDir = -0.3;
         if(xCamDir>0.3)
@@ -215,6 +228,7 @@ void initGame(){
 void Display() {
     setupLights();
     setupCamera();
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //Walls
     w->draw();
@@ -245,8 +259,9 @@ void Display() {
         {
             glPushMatrix();
             glTranslated(grenadeX, grenadeY, grenadeZ);
-            if(game_mode == SHOOT)
+            if(game_mode == SHOOT){
                 glRotated(grenadeRotAngle, 1, 0, -1);
+            }
             glScaled(0.03, 0.03, 0.03);
             g->draw();
             glPopMatrix();
