@@ -27,13 +27,18 @@ int trajectory;
 /* ------GAME MODE-------*/
 int game_mode;
 #define SHOOT 0
-#define TARGET 1
+#define AIM 1
 #define REPLAY 2
 
 /* ------GAME OBJECTS-------*/
 Target *t;
 Walls *w;
 Bullet *b;
+double bulletX = 0;
+double bulletY = -0.05;
+double bulletZ = 0.19;
+double bulletDirAngle = 0;
+double bulletRotAngle = 0;
 Grenade *g;
 Shuriken *s;
 
@@ -43,7 +48,15 @@ int height = 720;
 int prevMouseX=0;
 int prevMouseY=0;
 
-double xCamDir= 0.0;
+/* CAMERA VALUES */
+double xCamDir = 0.0;
+double yCamDir = 0.0;
+double zCamDir = -0.5;
+
+double xCamPos = 0.0;
+double yCamPos = 0.0;
+double zCamPos = 0.2;
+/*END*/
 
 void setupLights() {
     GLfloat ambient[] = { 0.7f, 0.7f, 0.7, 1.0f };
@@ -61,6 +74,7 @@ void setupLights() {
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity);
 }
 
+
 void setupCamera() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -72,9 +86,8 @@ void setupCamera() {
     gluPerspective(120, width / height, 0.001, 100);
     
     glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
     glLoadIdentity();
-    gluLookAt(0 , 0, 0.2, xCamDir, 0.0, -0.5, 0.0, 1, 0);
+    gluLookAt(xCamPos , yCamPos, zCamPos, xCamDir, yCamDir, zCamDir, 0.0, 1, 0);
     
 }
 
@@ -84,11 +97,11 @@ void initGame(){
     s = new Shuriken(sRadius, sHeight, sColor, sSlices, sStacks);
     b = new Bullet(bRadius, bHeight, bColor, bSlices, bStacks);
     g = new Grenade(gRadius, gSphereColor,gTorusColor,gCylinderColor, grenadeSlices,grenadeStacks);
-    game_mode   = TARGET;
-    trajectory  = SHURIKEN;
+    game_mode   = AIM;
+    trajectory  = BULLET;
 }
 void Display() {
-    //    setupLights();
+    setupLights();
     setupCamera();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //Walls
@@ -99,9 +112,20 @@ void Display() {
         case BULLET:
         {
             glPushMatrix();
+            glTranslated(bulletX, bulletY, bulletZ);
+            glRotated(bulletDirAngle, 0, 1, 0);
+            if(game_mode == SHOOT)
+                glRotated(bulletRotAngle, 0, 0, -1);
+            glRotated(-90, 1, 0, 0);
             glScaled(0.1, 0.1, 0.1);
             b->draw();
             glPopMatrix();
+            glColor3f(1, 0, 0);
+            glPointSize(9.0);
+            glBegin(GL_LINES);
+            glVertex3f(bulletX, bulletY, bulletZ);
+            glVertex3f(xCamDir, bulletY, -1);
+            glEnd();
             break;
         }
         case GRENADE:
@@ -124,8 +148,23 @@ void Display() {
     glFlush();
     
 }
+void translateBullet(){
+    double changeX = xCamDir - bulletX;
+    double changeZ = -1 - bulletZ;
+    double magnitude = sqrt(changeX*changeX + changeZ*changeZ);
+    if(magnitude!=0){
+        double advanceX = changeX /magnitude;
+        double advanceZ = changeZ/magnitude;
+        bulletX+=0.01*advanceX;
+        bulletZ+=0.01*advanceZ;
+    }
+}
 void anim(){
-    
+    if(game_mode == SHOOT && trajectory == BULLET){
+        translateBullet();
+        bulletRotAngle++;
+    }
+    glutPostRedisplay();
     
 }
 void spe(int k, int x,int y){
@@ -162,6 +201,10 @@ void key(unsigned char k, int x,int y)
     if(k=='s')
         trajectory = SHURIKEN;
     
+    /* SHOOT MODE*/
+    if(game_mode==AIM && k==' ')
+        game_mode = SHOOT;
+    
     glutPostRedisplay();//redisplay to update the screen with the changes
 }
 
@@ -169,17 +212,28 @@ void passM(int mouseX,int mouseY)
 {
     
     /* CAMERA CONTROL */
-    //Adjust to scene coordinates
-    double winW =glutGet(GLUT_WINDOW_WIDTH);
-    mouseX = mouseX - winW/2;
-    //Change x-comp of center of gluLookAT
-    xCamDir += 0.001*(mouseX - prevMouseX);
-    if(xCamDir<-0.1)
-        xCamDir = -0.1;
-    if(xCamDir>0.1)
-        xCamDir = 0.1;
-    
-    prevMouseX = mouseX;
+    if(game_mode == AIM){
+        //Adjust to scene coordinates
+        double winW =glutGet(GLUT_WINDOW_WIDTH);
+        mouseX = mouseX - winW/2;
+        
+        //Change x-comp of center of gluLookAT
+        xCamDir += 0.001*(mouseX - prevMouseX);
+        if(xCamDir<-0.3)
+            xCamDir = -0.3;
+        if(xCamDir>0.3)
+            xCamDir = 0.3;
+        prevMouseX = mouseX;
+        
+        //Rotate Trajectory
+        double changeX = xCamDir - bulletX;
+        double changeZ = -1 - bulletZ;
+        double angle = atan2(fabs(changeX),fabs(changeZ));
+        bulletDirAngle = (angle*180/M_PI);
+        if(changeX>0)
+            bulletDirAngle*=-1;
+        
+    }
     glutPostRedisplay();
     
 }
@@ -200,11 +254,11 @@ int main(int argc, char** argv) {
     glutPassiveMotionFunc(passM);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-    //    glutIdleFunc(anim);
+        glutIdleFunc(anim);
     
     glEnable(GL_DEPTH_TEST);
-    //    glEnable(GL_LIGHTING);
-    //    glEnable(GL_LIGHT0);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
     glEnable(GL_COLOR_MATERIAL);
     
