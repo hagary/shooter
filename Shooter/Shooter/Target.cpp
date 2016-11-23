@@ -20,8 +20,8 @@ Target::Target(GLdouble pos [3], GLdouble s,GLfloat c1 [3], GLfloat c2 [3], GLfl
 }
 void Target::draw(){
     glPushMatrix();
-    glScaled(scale, scale, scale);
     glTranslated(posX, posY, posZ);
+    glScaled(scale, scale, scale);
     
     //1. Inner Yellow Disk
     glColor3fv(color1);

@@ -29,6 +29,12 @@ int game_mode;
 #define SHOOT 0
 #define AIM 1
 #define REPLAY 2
+#define HIT_WALL 3
+#define HIT_TARGET 4
+
+double trajX;
+double trajY;
+double trajZ;
 
 /* ------GAME OBJECTS-------*/
 Target *t;
@@ -43,9 +49,16 @@ Grenade *g;
 double grenadeX = 0;
 double grenadeY = -0.05;
 double grenadeZ = 0.16;
+double grenadeDirAngle;
 double grenadeRotAngle = 0;
 double gBezier = 0.0;
 Shuriken *s;
+double shurikenX = 0;
+double shurikenY = -0.05;
+double shurikenZ = 0.16;
+double shurikenDirAngle;
+double shurikenRotAngle = 0;
+double sBezier = 0.0;
 
 int width = 1024;
 int height = 720;
@@ -74,7 +87,7 @@ void setupLights(){
     glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
     
     GLfloat lightIntensity[] = { 0.7f, 0.7f, 1, 1.0f };
-    GLfloat lightPosition[] = { xCamPos, yCamPos, zCamPos, 0.0f };
+    GLfloat lightPosition[] = { 0, 0.9, -0.9, 0.0f };
     glLightfv(GL_LIGHT0, GL_POSITION, lightIntensity);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity);
 }
@@ -113,8 +126,14 @@ void rotateBullet(){
         bulletDirAngle*=-1;
 }
 void rotateGrenade(){
-    
+    double changeX = xCamDir - 0;
+    double changeZ = -1 - 0.16;
+    double angle = atan2(fabs(changeX),fabs(changeZ));
+    grenadeDirAngle = (angle*180/M_PI);
+    if(changeX>0)
+        grenadeDirAngle*=-1;
 }
+
 double* bezier(double t, float* p0,float* p1,float* p2,float* p3){
     double res[2];
     res[0]=pow((1-t),3)*p0[0]+3*t*pow((1-t),2)*p1[0]+3*pow(t,2)*(1-t)*p2[0]+pow(t,3)*p3[0];
@@ -150,6 +169,30 @@ void anim(){
         }
 
     }
+    switch(trajectory){
+    case BULLET:{
+        trajX = bulletX;
+        trajY = bulletY;
+        trajZ = bulletZ;
+        break;
+    }
+    case GRENADE:{
+        trajX = grenadeX;
+        trajY = grenadeY;
+        trajZ = grenadeZ;
+        break;
+    }
+    case SHURIKEN:{
+        trajX = shurikenX;
+        trajY = shurikenY;
+        trajZ = shurikenZ;
+        break;
+    }
+    }
+    if(trajX < -0.99 || trajX > 0.99 || trajY <-0.99 || trajY >0.99 || trajZ <-0.99){
+        game_mode = HIT_WALL;
+    }
+    //TODO HIT_TARGET
     glutPostRedisplay();
     
 }
@@ -179,12 +222,15 @@ void key(unsigned char k, int x,int y){
         t->posZ+=0.01;
     
     /*TRAJECTORY CHOICE*/
-    if(k=='b')
+    if(k=='b'){
         trajectory = BULLET;
-    if(k=='g')
+    }
+    if(k=='g'){
         trajectory = GRENADE;
-    if(k=='s')
+    }
+    if(k=='s'){
         trajectory = SHURIKEN;
+    }
     
     /* SHOOT MODE*/
     if(game_mode==AIM && k==' ')
@@ -226,8 +272,8 @@ void initGame(){
     trajectory  = BULLET;
 }
 void Display() {
-    setupLights();
     setupCamera();
+//    setupLights();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //Walls
@@ -256,13 +302,14 @@ void Display() {
             break;
         }
         case GRENADE:
-        {
+        {   rotateGrenade();
             glPushMatrix();
+            glRotated(grenadeDirAngle, 0, 1, 0);
             glTranslated(grenadeX, grenadeY, grenadeZ);
+            glScaled(0.03, 0.03, 0.03);
             if(game_mode == SHOOT){
                 glRotated(grenadeRotAngle, 1, 0, -1);
             }
-            glScaled(0.03, 0.03, 0.03);
             g->draw();
             glPopMatrix();
             break;
@@ -298,10 +345,10 @@ int main(int argc, char** argv) {
         glutIdleFunc(anim);
     
     glEnable(GL_DEPTH_TEST);
-        glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
-    glEnable(GL_COLOR_MATERIAL);
+//        glEnable(GL_LIGHTING);
+//        glEnable(GL_LIGHT0);
+//    glEnable(GL_NORMALIZE);
+//    glEnable(GL_COLOR_MATERIAL);
     
     glShadeModel(GL_SMOOTH);
     
