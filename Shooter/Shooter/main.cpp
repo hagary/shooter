@@ -72,7 +72,6 @@ void setupCamera() {
     gluPerspective(120, width / height, 0.001, 100);
     
     glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
     glLoadIdentity();
     gluLookAt(0 , 0, 0.2, xCamDir, 0.0, -0.5, 0.0, 1, 0);
     
