@@ -106,6 +106,19 @@ void setupCamera(){
     gluLookAt(xCamPos , yCamPos, zCamPos, xCamDir, yCamDir, zCamDir, 0.0, 1, 0);
     
 }
+void resetPositions(){
+     bulletX = 0;
+     bulletY = -0.05;
+     bulletZ = 0.19;
+    
+     grenadeX = 0;
+     grenadeY = -0.05;
+     grenadeZ = 0.16;
+    
+     shurikenX = 0;
+     shurikenY = -0.05;
+     shurikenZ = 0.16;
+}
 void translateBullet(){
     double changeX = xCamDir - bulletX;
     double changeZ = -1 - bulletZ;
@@ -133,7 +146,14 @@ void rotateGrenade(){
     if(changeX>0)
         grenadeDirAngle*=-1;
 }
-
+void rotateShuriken(){
+    double changeX = xCamDir - 0;
+    double changeZ = -1 - 0.16;
+    double angle = atan2(fabs(changeX),fabs(changeZ));
+    shurikenDirAngle = (angle*180/M_PI);
+    if(changeX>0)
+        shurikenDirAngle*=-1;
+}
 double* bezier(double t, float* p0,float* p1,float* p2,float* p3){
     double res[2];
     res[0]=pow((1-t),3)*p0[0]+3*t*pow((1-t),2)*p1[0]+3*pow(t,2)*(1-t)*p2[0]+pow(t,3)*p3[0];
@@ -160,7 +180,32 @@ void translateShuriken(){
     shurikenX = p[0];
     shurikenZ = p[1];
 }
+void setReplayMode(int v){
+    //change cam position
+    resetPositions();
+    game_mode = REPLAY;
+}
 void anim(){
+    switch(trajectory){
+        case BULLET:{
+            trajX = bulletX;
+            trajY = bulletY;
+            trajZ = bulletZ;
+            break;
+        }
+        case GRENADE:{
+            trajX = grenadeX;
+            trajY = grenadeY;
+            trajZ = grenadeZ;
+            break;
+        }
+        case SHURIKEN:{
+            trajX = shurikenX;
+            trajY = shurikenY;
+            trajZ = shurikenZ;
+            break;
+        }
+    }
     if(game_mode == SHOOT){
         switch(trajectory){
             case BULLET:
@@ -184,27 +229,9 @@ void anim(){
         }
 
     }
-    switch(trajectory){
-    case BULLET:{
-        trajX = bulletX;
-        trajY = bulletY;
-        trajZ = bulletZ;
-        break;
-    }
-    case GRENADE:{
-        trajX = grenadeX;
-        trajY = grenadeY;
-        trajZ = grenadeZ;
-        break;
-    }
-    case SHURIKEN:{
-        trajX = shurikenX;
-        trajY = shurikenY;
-        trajZ = shurikenZ;
-        break;
-    }
-    }
     if(trajX < -0.99 || trajX > 0.99 || trajY <-0.99 || trajY >0.99 || trajZ <-0.99){
+        if(game_mode == SHOOT)
+            glutTimerFunc(1000,setReplayMode, 0);
         game_mode = HIT_WALL;
     }
     //TODO HIT_TARGET
@@ -330,8 +357,9 @@ void Display() {
             break;
         }
         case SHURIKEN:
-        {
+        {   rotateShuriken();
             glPushMatrix();
+            glRotated(shurikenDirAngle, 0, 1, 0);
             glTranslated(shurikenX, shurikenY, shurikenZ);
             if(game_mode == SHOOT){
                 glRotated(shurikenRotAngle, 0, 1, 0);
