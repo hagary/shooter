@@ -8,6 +8,7 @@
 
 #include <GLUT/glut.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "Grenade.hpp"
 #include "Bullet.hpp"
@@ -19,9 +20,13 @@
 
 int width = 1024;
 int height = 720;
-
 Target *t;
+Walls *w;
 
+int prevMouseX=0;
+int prevMouseY=0;
+
+double xCamDir= 0.0;
 
 void setupLights() {
     GLfloat ambient[] = { 0.7f, 0.7f, 0.7, 1.0f };
@@ -46,16 +51,20 @@ void setupCamera() {
 //    glOrtho(-aspect, aspect, -1, 1, -1, 1);
 //    glOrtho(-0.5, 0.5, -0.5, 0.5, -1, 1);
 //    glFrustum(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat near, GLfloat far);
+
     gluPerspective(120, width / height, 0.001, 10);
-    
-    
+
     glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
     glLoadIdentity();
-    gluLookAt(0 , 0, 0.2,0.0, 0.0, -0.5, 0.0, 1, 0);
+    gluLookAt(0 , 0, 0.2, xCamDir, 0.0, -0.5, 0.0, 1, 0);
+
 }
 
 void initGame(){
     t = new Target(tPos,tScale,tColor1,tColor2,tColor3,tSlices,tStacks);
+    w = new Walls();
+
 }
 void Display() {
 //    setupLights();
@@ -84,15 +93,10 @@ void Display() {
 //            glRotated(angle, 1, 1, 1);
 //            s->draw();
 //            glPopMatrix();
-    
-    //Target
-        glPushMatrix();
-        t->draw();
-        glPopMatrix();
-    
     //Walls
-    Walls *w = new Walls();
-        w->draw();
+    w->draw();
+    //Target
+    t->draw();
     glFlush();
 
 }
@@ -129,6 +133,26 @@ void key(unsigned char k, int x,int y)
     glutPostRedisplay();//redisplay to update the screen with the changes
 }
 
+void passM(int mouseX,int mouseY)
+{
+    
+    /* CAMERA CONTROL */
+    //Change x-comp of center of gluLookAT
+    //Adjust to scene coordinates
+    double winW =glutGet(GLUT_WINDOW_WIDTH);
+    mouseX  = mouseX/winW*width;
+    mouseX = mouseX - winW/2;
+    xCamDir += 0.001*(mouseX - prevMouseX);
+    if(xCamDir<-0.1)
+        xCamDir = -0.1;
+    if(xCamDir>0.1)
+        xCamDir = 0.1;
+    prevMouseX = mouseX;
+    printf("%f\n",xCamDir);
+    glutPostRedisplay();
+
+}
+
 int main(int argc, char** argv) {
     //Initialize needed objects
     initGame();
@@ -142,6 +166,7 @@ int main(int argc, char** argv) {
     glutDisplayFunc(Display);
     glutKeyboardFunc(key);
     glutSpecialFunc(spe);
+    glutPassiveMotionFunc(passM);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 //    glutIdleFunc(anim);
