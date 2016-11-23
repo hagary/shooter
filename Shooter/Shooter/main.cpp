@@ -77,8 +77,6 @@ void setupLights() {
     glLightfv(GL_LIGHT0, GL_POSITION, lightIntensity);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity);
 }
-
-
 void setupCamera() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -92,68 +90,6 @@ void setupCamera() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(xCamPos , yCamPos, zCamPos, xCamDir, yCamDir, zCamDir, 0.0, 1, 0);
-    
-}
-
-void initGame(){
-    w = new Walls();
-    t = new Target(tPos,tScale,tColor1,tColor2,tColor3,tSlices,tStacks);
-    s = new Shuriken(sRadius, sHeight, sColor, sSlices, sStacks);
-    b = new Bullet(bRadius, bHeight, bColor, bSlices, bStacks);
-    g = new Grenade(gRadius, gSphereColor,gTorusColor,gCylinderColor, grenadeSlices,grenadeStacks);
-    game_mode   = AIM;
-    trajectory  = BULLET;
-}
-void Display() {
-    setupLights();
-    setupCamera();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //Walls
-    w->draw();
-    //Target
-    t->draw();
-    switch (trajectory) {
-        case BULLET:
-        {
-            glPushMatrix();
-            glTranslated(bulletX, bulletY, bulletZ);
-            glRotated(bulletDirAngle, 0, 1, 0);
-            if(game_mode == SHOOT)
-                glRotated(bulletRotAngle, 0, 0, -1);
-            glRotated(-90, 1, 0, 0);
-            glScaled(0.1, 0.1, 0.1);
-            b->draw();
-            glPopMatrix();
-            //Aiming Direction
-            glColor3f(1, 0, 0);
-            glPointSize(9.0);
-            glBegin(GL_LINES);
-            glVertex3f(bulletX, bulletY, bulletZ);
-            glVertex3f(xCamDir, bulletY, -1);
-            glEnd();
-            break;
-        }
-        case GRENADE:
-        {
-            glPushMatrix();
-            glTranslated(grenadeX, grenadeY, grenadeZ);
-            if(game_mode == SHOOT)
-                glRotated(grenadeRotAngle, 1, 0, -1);
-            glScaled(0.03, 0.03, 0.03);
-            g->draw();
-            glPopMatrix();
-            break;
-        }
-        case SHURIKEN:
-        {
-            glPushMatrix();
-            glScaled(0.1, 0.1, 0.1);
-            s->draw();
-            glPopMatrix();
-            break;
-        }
-    }
-    glFlush();
     
 }
 void translateBullet(){
@@ -175,7 +111,6 @@ void rotateBullet(){
     if(changeX>0)
         bulletDirAngle*=-1;
 }
-
 void rotateGrenade(){
     
 }
@@ -239,7 +174,6 @@ void key(unsigned char k, int x,int y)
     
     glutPostRedisplay();//redisplay to update the screen with the changes
 }
-
 void passM(int mouseX,int mouseY)
 {
     
@@ -265,7 +199,67 @@ void passM(int mouseX,int mouseY)
     glutPostRedisplay();
     
 }
-
+void initGame(){
+    w = new Walls();
+    t = new Target(tPos,tScale,tColor1,tColor2,tColor3,tSlices,tStacks);
+    s = new Shuriken(sRadius, sHeight, sColor, sSlices, sStacks);
+    b = new Bullet(bRadius, bHeight, bColor, bSlices, bStacks);
+    g = new Grenade(gRadius, gSphereColor,gTorusColor,gCylinderColor, grenadeSlices,grenadeStacks);
+    game_mode   = AIM;
+    trajectory  = BULLET;
+}
+void Display() {
+    setupLights();
+    setupCamera();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //Walls
+    w->draw();
+    //Target
+    t->draw();
+    switch (trajectory) {
+        case BULLET:
+        {
+            glPushMatrix();
+            glTranslated(bulletX, bulletY, bulletZ);
+            glRotated(bulletDirAngle, 0, 1, 0);
+            if(game_mode == SHOOT)
+                glRotated(bulletRotAngle, 0, 0, -1);
+            glRotated(-90, 1, 0, 0);
+            glScaled(0.1, 0.1, 0.1);
+            b->draw();
+            glPopMatrix();
+            //Aiming Direction
+            glColor3f(1, 0, 0);
+            glPointSize(9.0);
+            glBegin(GL_LINES);
+            glVertex3f(bulletX, bulletY, bulletZ);
+            glVertex3f(xCamDir, bulletY, -1);
+            glEnd();
+            break;
+        }
+        case GRENADE:
+        {
+            glPushMatrix();
+            glTranslated(grenadeX, grenadeY, grenadeZ);
+            if(game_mode == SHOOT)
+                glRotated(grenadeRotAngle, 1, 0, -1);
+            glScaled(0.03, 0.03, 0.03);
+            g->draw();
+            glPopMatrix();
+            break;
+        }
+        case SHURIKEN:
+        {
+            glPushMatrix();
+            glScaled(0.1, 0.1, 0.1);
+            s->draw();
+            glPopMatrix();
+            break;
+        }
+    }
+    glFlush();
+    
+}
 int main(int argc, char** argv) {
     //Initialize needed objects
     initGame();
