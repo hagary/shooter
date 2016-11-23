@@ -38,6 +38,7 @@ double bulletX = 0;
 double bulletY = -0.05;
 double bulletZ = 0.19;
 double bulletDirAngle = 0;
+double bulletRotAngle = 0;
 Grenade *g;
 Shuriken *s;
 
@@ -113,6 +114,8 @@ void Display() {
             glPushMatrix();
             glTranslated(bulletX, bulletY, bulletZ);
             glRotated(bulletDirAngle, 0, 1, 0);
+            if(game_mode == SHOOT)
+                glRotated(bulletRotAngle, 0, 0, -1);
             glRotated(-90, 1, 0, 0);
             glScaled(0.1, 0.1, 0.1);
             b->draw();
@@ -145,17 +148,21 @@ void Display() {
     glFlush();
     
 }
+void translateBullet(){
+    double changeX = xCamDir - bulletX;
+    double changeZ = -1 - bulletZ;
+    double magnitude = sqrt(changeX*changeX + changeZ*changeZ);
+    if(magnitude!=0){
+        double advanceX = changeX /magnitude;
+        double advanceZ = changeZ/magnitude;
+        bulletX+=0.01*advanceX;
+        bulletZ+=0.01*advanceZ;
+    }
+}
 void anim(){
     if(game_mode == SHOOT && trajectory == BULLET){
-        double changeX = xCamDir - bulletX;
-        double changeZ = -1 - bulletZ;
-        double magnitude = sqrt(changeX*changeX + changeZ*changeZ);
-        if(magnitude!=0){
-            double advanceX = changeX /magnitude;
-            double advanceZ = changeZ/magnitude;
-            bulletX+=0.01*advanceX;
-            bulletZ+=0.01*advanceZ;
-        }
+        translateBullet();
+        bulletRotAngle++;
     }
     glutPostRedisplay();
     
