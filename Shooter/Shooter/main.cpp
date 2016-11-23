@@ -150,7 +150,16 @@ void translateGrenade(){
     grenadeY = p[1];
     grenadeZ = p[0];
 }
-
+void translateShuriken(){
+    float p0 [2] = {0,0.16};
+    float p1 [2] = {-0.1,-0.1};
+    float p2 [2] = {-0.4,-0.75};
+    float p3 [2] = {0, -0.9};
+    double* p =bezier(gBezier,p0,p1,p2,p3);
+    gBezier+=0.001;
+    shurikenX = p[0];
+    shurikenZ = p[1];
+}
 void anim(){
     if(game_mode == SHOOT){
         switch(trajectory){
@@ -164,6 +173,12 @@ void anim(){
             {
                 translateGrenade();
                 grenadeRotAngle++;
+                break;
+            }
+            case SHURIKEN:
+            {
+                translateShuriken();
+                shurikenRotAngle+=2;
                 break;
             }
         }
@@ -273,7 +288,7 @@ void initGame(){
 }
 void Display() {
     setupCamera();
-//    setupLights();
+    setupLights();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //Walls
@@ -317,7 +332,12 @@ void Display() {
         case SHURIKEN:
         {
             glPushMatrix();
-            glScaled(0.1, 0.1, 0.1);
+            glTranslated(shurikenX, shurikenY, shurikenZ);
+            if(game_mode == SHOOT){
+                glRotated(shurikenRotAngle, 0, 1, 0);
+            }
+            glRotated(-90, 1, 0, 0);
+            glScaled(0.08, 0.08, 0.08);
             s->draw();
             glPopMatrix();
             break;
@@ -345,10 +365,10 @@ int main(int argc, char** argv) {
         glutIdleFunc(anim);
     
     glEnable(GL_DEPTH_TEST);
-//        glEnable(GL_LIGHTING);
-//        glEnable(GL_LIGHT0);
-//    glEnable(GL_NORMALIZE);
-//    glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
+    glEnable(GL_NORMALIZE);
+    glEnable(GL_COLOR_MATERIAL);
     
     glShadeModel(GL_SMOOTH);
     
