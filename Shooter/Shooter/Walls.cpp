@@ -29,7 +29,7 @@ void Walls::draw(){
     /* Walls */
     
     //FRONT WALL
-    glColor3f(0,0,0.2);
+    glColor3f(0.6,0.6,0.6);
     glVertex3f(-1,-1,-1);
     glVertex3f(1,-1,-1);
     glVertex3f(1,1,-1);
