@@ -39,7 +39,7 @@ GLfloat tColor1[3]={1.0,1.0,0.0}; //yellow
 GLfloat tColor2[3]={1.0,0,0.0}; //red
 GLfloat tColor3[3]={0,0,1.0}; //blue
 GLdouble tPos[3]={0.0,0.0,-0.9};
-GLdouble tScale = 0.2;
+GLdouble tScale = 0.5;
 
 
 //WALL VALUES
