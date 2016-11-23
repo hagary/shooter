@@ -150,7 +150,16 @@ void translateGrenade(){
     grenadeY = p[1];
     grenadeZ = p[0];
 }
-
+void translateShuriken(){
+    float p0 [2] = {0,0.16};
+    float p1 [2] = {-0.1,-0.1};
+    float p2 [2] = {-0.4,-0.75};
+    float p3 [2] = {0, -0.9};
+    double* p =bezier(gBezier,p0,p1,p2,p3);
+    gBezier+=0.001;
+    shurikenX = p[0];
+    shurikenZ = p[1];
+}
 void anim(){
     if(game_mode == SHOOT){
         switch(trajectory){
@@ -168,7 +177,8 @@ void anim(){
             }
             case SHURIKEN:
             {
-                shurikenRotAngle++;
+                translateShuriken();
+                shurikenRotAngle+=2;
                 break;
             }
         }
