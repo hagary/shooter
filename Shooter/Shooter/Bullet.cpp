@@ -26,12 +26,13 @@ void Bullet::draw(){
     glColor3fv(color);
     drawBigCylinder();
     drawEnclosingDisk();
-    drawBigTorus();
-    drawSmallTorus();
     drawIntermediateCone();
     drawSmallCylinder();
     drawUpperCone();
     drawEnclosingSphere();
+    glColor3f(0.4, 0.4, 0.4);
+    drawBigTorus();
+    drawSmallTorus();
     glPopMatrix();
 }
 void Bullet::drawBigCylinder(){
