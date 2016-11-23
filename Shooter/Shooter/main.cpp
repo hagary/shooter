@@ -62,7 +62,7 @@ float yCamPos = 0.0;
 float zCamPos = 0.2;
 /*END*/
 
-void setupLights() {
+void setupLights(){
     GLfloat ambient[] = { 0.7f, 0.7f, 0.7, 1.0f };
     GLfloat diffuse[] = { 0.6f, 0.6f, 0.6, 1.0f };
     GLfloat specular[] = { 1.0f, 1.0f, 1.0, 1.0f };
@@ -77,7 +77,7 @@ void setupLights() {
     glLightfv(GL_LIGHT0, GL_POSITION, lightIntensity);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity);
 }
-void setupCamera() {
+void setupCamera(){
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     //    float aspect = (float)width / (float)height;
@@ -113,6 +113,12 @@ void rotateBullet(){
 }
 void rotateGrenade(){
     
+}
+int* bezier(float t, int* p0,int* p1,int* p2,int* p3){
+    int res[2];
+    res[0]=pow((1-t),3)*p0[0]+3*t*pow((1-t),2)*p1[0]+3*pow(t,2)*(1-t)*p2[0]+pow(t,3)*p3[0];
+    res[1]=pow((1-t),3)*p0[1]+3*t*pow((1-t),2)*p1[1]+3*pow(t,2)*(1-t)*p2[1]+pow(t,3)*p3[1];
+    return res;
 }
 void anim(){
     if(game_mode == SHOOT){
@@ -151,8 +157,7 @@ void spe(int k, int x,int y){
     
     glutPostRedisplay();
 }
-void key(unsigned char k, int x,int y)
-{
+void key(unsigned char k, int x,int y){
     /* TARGET CONTROL */
     /* Z-AXIS */
     if(k=='k')
@@ -174,8 +179,7 @@ void key(unsigned char k, int x,int y)
     
     glutPostRedisplay();//redisplay to update the screen with the changes
 }
-void passM(int mouseX,int mouseY)
-{
+void passM(int mouseX,int mouseY){
     
     if(game_mode == AIM){
         /* CAMERA CONTROL */
