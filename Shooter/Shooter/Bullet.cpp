@@ -35,33 +35,24 @@ void Bullet::draw(){
     glPopMatrix();
 }
 void Bullet::drawBigCylinder(){
-    glPushMatrix();
     GLUquadricObj * qobj;
     qobj = gluNewQuadric(); gluQuadricDrawStyle(qobj,GLU_FILL);
     gluCylinder(qobj, radius, radius, height, slices, stacks);
-    glPopMatrix();
 }
 void Bullet::drawEnclosingDisk(){
-    glPushMatrix();
     GLUquadricObj * qobj;
     qobj = gluNewQuadric();
     gluDisk(qobj, 0, radius, slices, stacks);
-    glPopMatrix();
 }
 void Bullet::drawBigTorus(){
-    glPushMatrix();
     GLdouble innerR = radius/10;
     GLdouble outerR = radius + innerR;
     glutSolidTorus(innerR, outerR, slices, stacks);
-    glPopMatrix();
 }
 void Bullet::drawSmallTorus(){
-    glPushMatrix();
-//    glTranslated(0, 0, -0.005);
     GLdouble innerR = radius/10;
     GLdouble outerR = radius/2 + innerR;
     glutSolidTorus(innerR, outerR, slices, stacks);
-    glPopMatrix();
 }
 void Bullet::drawIntermediateCone(){
     glPushMatrix();
