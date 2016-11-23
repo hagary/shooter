@@ -38,7 +38,7 @@ void Target::draw(){
     GLUquadricObj * qobjB;
     qobjB = gluNewQuadric();
     gluDisk(qobjB, 0.2, 0.3, slices, stacks);
+    
     glPopMatrix();
-
 
 }

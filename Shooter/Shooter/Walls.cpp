@@ -34,7 +34,11 @@ void Walls::draw(){
     glVertex3f(1,-1,-1);
     glVertex3f(1,1,-1);
     glVertex3f(-1,1,-1);
-    
+    //BACK WALL
+    glVertex3f(-1,-1,1);
+    glVertex3f(1,-1,1);
+    glVertex3f(1,1,1);
+    glVertex3f(-1,1,1);
     //SIDE WALLS
     glColor3f(0.5,0.5,0.5);
     glVertex3f(1,1,1);
